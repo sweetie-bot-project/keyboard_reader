@@ -38,7 +38,6 @@
  */
 
 #include "ros/ros.h"
-#include "keyboard_reader/check_for_keyboard_priority.h"
 #include "keyboard_reader/keyboard_reader.h"
 #include "keyboard_reader/Key.h"
 
@@ -76,10 +75,6 @@ int main(int argc, char *argv[])
     ROS_INFO("Try: %s [device]\n", argv[0]);
     return 1;
   }
-
-  // Determine whether the GUI window with focus should receive keyboard
-  // commands, or if this app should.
-  keyboard_priority::KeyboardPriority keyboard_priority_manager;
 
   // Creates publisher that advertises Key messages on rostopic /keyboard
   ros::Publisher pub_keyboard = nh.advertise<keyboard_reader::Key>("keyboard", 100);

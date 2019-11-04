@@ -11,9 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
-# To determine keyboard priority, based on active GUI window
-find_package(X11 REQUIRED)
-
 ################################################
 ## Declare ROS messages, services and actions ##
 ################################################
@@ -45,16 +42,10 @@ catkin_package(
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-link_directories(${X11_LIBRARY_DIR})
-
-add_library(check_for_keyboard_priority src/check_for_keyboard_priority.cpp)   
-target_link_libraries(check_for_keyboard_priority ${catkin_LIBRARIES} ${X11_LIBRARIES} )   
-add_dependencies(check_for_keyboard_priority temoto_generate_messages_cpp)
-
 add_library(keyboard_reader src/keyboard_reader.cpp)
 target_link_libraries(keyboard_reader ${catkin_LIBRARIES})
 add_dependencies(keyboard_reader ${catkin_EXPORTED_TARGETS})
 
 add_executable(keyboard_event_publisher src/keyboard_event_publisher.cpp)
-target_link_libraries(keyboard_event_publisher ${catkin_LIBRARIES} keyboard_reader check_for_keyboard_priority)
+target_link_libraries(keyboard_event_publisher ${catkin_LIBRARIES} keyboard_reader)
 add_dependencies(keyboard_event_publisher keyboard_reader_gencpp ${catkin_EXPORTED_TARGETS})
