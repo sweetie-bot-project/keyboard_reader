@@ -88,7 +88,7 @@ int Keyboard::openKeyboard( const char *device_path )
   printf("Opening device: %s \n", device_path);
 
   // file descriptor to the opened device. Nonblock so we can spin while waiting for data
-  descriptor_ = open(device_path, O_RDONLY|O_NONBLOCK,S_IRWXU);
+  descriptor_ = open(device_path, O_RDONLY | O_NONBLOCK,S_IRWXU);
 
   // if failed to open device_path
   if(descriptor_ < 0)
@@ -99,7 +99,7 @@ int Keyboard::openKeyboard( const char *device_path )
   }
 
   /* NOTE: If your keyboard does not have substring specified in valid_substring in its EVIOCNAME, uncomment following line */
-//   return descriptor_;
+  return descriptor_;
 
   // Following is a fail-safe to avoid opening non-keyboard event by checking if the input device_path has valid_substring in its name.
   char name[255];						// meaningful, ie EVIOCGNAME name
@@ -221,7 +221,8 @@ std::vector <uint16_t> Keyboard::getKeyEvent()
   }
   else
   {
-    printf("read() failed: %s\n", strerror(errno));	// let user know that read() failed
+    if (errno != EAGAIN)
+      printf("read() failed: %s\n", strerror(errno));	// let user know that read() failed
     return {0, 0};
   }
 
